@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Game Ratio, Paul Monahan Golf</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f1f3d;--navy-mid:#1a3260;--gold:#b8892a;--gold-light:#d4a843;--off-white:#fafaf8;--page-bg:#f4f2ee;--card-bg:#ffffff;--text:#111827;--body:#374151;--subtle:#6b7280;--border:#e5e2da;--red:#b91c1c;--green:#166534;--radius-sm:10px;--radius:16px;--radius-lg:24px;--shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);--shadow:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);--shadow-lg:0 12px 40px rgba(0,0,0,.10),0 2px 8px rgba(0,0,0,.05)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--page-bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.progress-wrap{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:100;display:none;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.progress-wrap.visible{display:block}
+.progress-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.progress-track{flex:1;height:3px;background:#e9e6e0;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;transition:width .45s cubic-bezier(.16,1,.3,1);width:0%}
+.progress-text{font-size:14px;font-weight:700;color:#111827;white-space:nowrap;min-width:56px;text-align:right}
+#intro-section{max-width:660px;margin:0 auto;padding:0 20px}
+#intro-section{padding-top:60px;padding-bottom:60px}
+.intro-card{background:var(--card-bg);border-radius:var(--radius-lg);padding:52px 48px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.intro-card h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--navy);margin-bottom:16px;line-height:1.2}
+.intro-card p{font-size:16.5px;line-height:1.78;color:#1f2937;margin-bottom:14px}
+.framework-panel{background:var(--navy);border-radius:var(--radius);padding:24px 28px;margin:32px 0}
+.fw-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#ffffff;margin-bottom:14px;letter-spacing:.01em;text-align:center;white-space:nowrap;font-variant-numeric:lining-nums;font-feature-settings:'lnum' 1}
+.fw-header{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.12)}
+.fw-header-hero{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#86efac}
+.fw-header-mid{width:60px}
+.fw-header-bandit{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#fca5a5;text-align:right}
+.fw-pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.fw-pair:last-child{border-bottom:none}
+.fw-hero-name{font-size:15px;font-weight:600;color:#86efac}
+
+.fw-verb{font-size:11px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;width:60px;flex-shrink:0}
+.fw-bandit-name{font-size:15px;font-weight:600;color:#fca5a5;text-align:right}
+
+.intro-note{font-size:15px;color:#374151;line-height:1.7;margin-bottom:32px;padding:18px 22px;background:var(--off-white);border-radius:var(--radius-sm);border-left:4px solid var(--gold)}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:18px 32px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.02em;transition:all .2s}
+.btn-primary:hover{background:var(--navy-mid);transform:translateY(-1px);box-shadow:0 8px 28px rgba(15,31,61,.22)}
+#quiz-section{display:none;padding-top:0;padding-bottom:0;background:var(--navy);min-height:100vh}.quiz-header{margin-bottom:28px;padding:36px 20px 24px;max-width:660px;margin-left:auto;margin-right:auto}.quiz-header-tag{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#d4a843;margin-bottom:8px}.quiz-header h2{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#ffffff}
+.quiz-header{margin-bottom:28px;padding:36px 20px 24px;max-width:660px;margin-left:auto;margin-right:auto}
+.quiz-header-tag{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#d4a843;margin-bottom:8px}
+.quiz-header h2{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#ffffff}
+.question-card{background:var(--card-bg);border-radius:var(--radius-lg);padding:40px 40px 36px;border:1px solid var(--border);box-shadow:var(--shadow);display:none;animation:slideIn .3s ease-out}
+.question-card.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.q-counter{font-size:14px;font-weight:700;color:#111827;margin-bottom:22px;display:flex;align-items:center;gap:8px}
+.q-counter-dots{display:flex;gap:3px}
+.q-counter-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s}
+.q-counter-dot.filled{background:var(--gold)}
+.q-counter-dot.current{background:var(--navy)}
+.q-text{font-size:20px;font-weight:400;line-height:1.72;color:#111827;margin-bottom:36px;letter-spacing:-.01em}
+.scale-wrapper{display:flex;flex-direction:column;gap:10px}
+.scale-row{display:flex;gap:8px}
+.scale-option{flex:1;display:flex;flex-direction:column;align-items:center}
+.scale-btn{width:100%;padding:16px 4px;border-radius:10px;border:2px solid #b8b4aa;background:#ece9e3;cursor:pointer;font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#111827;transition:all .15s;line-height:1}
+.scale-btn:hover:not(.selected){border-color:var(--navy);color:var(--navy);background:#fff;transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,31,61,.1)}
+.scale-btn.selected{background:var(--navy);border-color:var(--navy);color:#fff;transform:translateY(-2px);box-shadow:0 6px 18px rgba(15,31,61,.22)}
+.scale-ends{display:flex;justify-content:space-between;padding:0 4px}
+.scale-end-label{font-size:13px;font-weight:600;color:#111827;letter-spacing:.04em}
+.quiz-inner{max-width:660px;margin:0 auto;padding:0 20px 60px}.quiz-actions{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.15)}
+.btn-ghost{display:flex;align-items:center;gap:6px;padding:13px 22px;border-radius:var(--radius-sm);border:2px solid #ffffff;background:rgba(255,255,255,0.12);font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#ffffff;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{border-color:#ffffff;color:#ffffff;background:rgba(255,255,255,0.22)}
+.btn-ghost:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+.btn-next{display:flex;align-items:center;gap:8px;padding:14px 30px;border-radius:var(--radius-sm);border:none;background:#d4a843;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#0f1f3d;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.btn-next:hover{background:#e0b84d;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.btn-next:disabled{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.4);cursor:not-allowed;transform:none;box-shadow:none}
+#results-section{display:none;padding-top:0;padding-bottom:0;background:var(--navy);min-height:100vh}
+.results-inner{max-width:660px;margin:0 auto;padding:52px 20px 80px}.results-intro{text-align:center;margin-bottom:36px}
+.results-eyebrow{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.results-intro h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,6vw,3rem);font-weight:600;color:#ffffff;line-height:1.1}
+.results-intro h2 em{font-style:italic;color:var(--gold)}
+.gauge-card{background:var(--navy);border-radius:var(--radius-lg);padding:44px 40px 40px;text-align:center;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.gauge-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(184,137,42,.18) 0%,transparent 65%);pointer-events:none}
+.gauge-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(184,137,42,.5),transparent)}
+.gauge-eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#d4a843;margin-bottom:28px;position:relative}
+.gauge-container{width:320px;margin:0 auto 4px}
+.gauge-container svg{display:block;width:100%}
+.gauge-score-overlay{text-align:center;margin-top:8px;margin-bottom:16px}
+.gauge-mgr-num{font-family:'Inter',sans-serif;font-size:3rem;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em}
+.gauge-mgr-label{font-size:10px;font-weight:700;letter-spacing:.18em;color:#ffffff;margin-top:4px;text-transform:uppercase}
+.gauge-tier-name{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:600;font-style:italic;color:#fff;margin-bottom:12px;position:relative}
+.gauge-tier-copy{font-size:16px;font-weight:400;line-height:1.72;color:#ffffff;max-width:460px;margin:0 auto;position:relative}
+.breakdown-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.bd-card{background:var(--card-bg);border-radius:var(--radius);padding:28px 24px;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.bd-card-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:7px}
+.bd-card.bd-bandits .bd-card-title{color:var(--red)}
+.bd-card.bd-heroes .bd-card-title{color:var(--green)}
+.bd-card-title::before{content:'';width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.bd-bandits .bd-card-title::before{background:var(--red)}
+.bd-heroes .bd-card-title::before{background:var(--green)}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.score-row:last-child{margin-bottom:0}
+.score-name{font-size:14px;font-weight:600;color:#111827;width:104px;flex-shrink:0}
+.score-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width 1.1s cubic-bezier(.16,1,.3,1);width:0%}
+.bd-bandits .score-fill{background:linear-gradient(90deg,#fca5a5,#dc2626)}
+.bd-heroes .score-fill{background:linear-gradient(90deg,#86efac,#16a34a)}
+.score-num{font-size:13px;font-weight:700;color:#374151;width:28px;text-align:right;flex-shrink:0}
+.spotlight-block{margin-bottom:20px}
+.spotlight-block-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--navy);margin-bottom:14px;padding-left:2px}
+.spotlight{background:var(--card-bg);border-radius:var(--radius);padding:30px 32px;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.spotlight.bandit-card{border-top:3px solid var(--red)}
+.spotlight.hero-card{border-top:3px solid var(--green)}
+.spotlight-concept{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.bandit-card .spotlight-concept{color:var(--red)}
+.hero-card .spotlight-concept{color:var(--green)}
+.spotlight-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--navy);margin-bottom:12px}
+.spotlight-desc{font-size:16px;line-height:1.78;color:#1f2937;margin-bottom:20px}
+.strategy-tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#92640a;margin-bottom:10px}
+.strategy-body{font-size:16px;line-height:1.78;color:#1f2937;font-style:italic;padding:18px 22px;background:#f9f6f0;border-radius:var(--radius-sm);border-left:4px solid var(--gold)}
+.cta-card{background:var(--navy);border-radius:var(--radius-lg);padding:52px 48px;text-align:center;margin-top:8px;margin-bottom:8px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.cta-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(184,137,42,.5),transparent)}
+.cta-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(184,137,42,.12) 0%,transparent 65%);pointer-events:none}
+.cta-card-inner{position:relative;z-index:1}
+.cta-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#d4a843;margin-bottom:14px}
+.cta-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#fff;margin-bottom:14px;line-height:1.15}
+.cta-card p{font-size:16px;line-height:1.74;color:#ffffff;max-width:440px;margin:0 auto 32px}
+.cta-gold-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:17px 44px;background:#d4a843;color:var(--navy);border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;letter-spacing:.02em}
+.cta-gold-btn:hover{background:#e0b84d;transform:translateY(-2px);box-shadow:0 10px 32px rgba(184,137,42,.35)}
+.cta-retake{display:block;margin:18px auto 0;background:none;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#ffffff;cursor:pointer;text-decoration:underline;text-underline-offset:3px;transition:color .15s}
+.cta-retake:hover{color:#ffffff}
+footer{background:var(--navy);padding:28px 24px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+footer p{font-size:12.5px;color:#ffffff;letter-spacing:.02em}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .55s cubic-bezier(.16,1,.3,1) both}
+.anim-1{animation-delay:.05s}.anim-2{animation-delay:.15s}.anim-3{animation-delay:.25s}.anim-4{animation-delay:.35s}.anim-5{animation-delay:.45s}
+@media(max-width:520px){.intro-card{padding:36px 24px}.framework-panel{grid-template-columns:1fr;gap:20px}.fw-divider{display:none}.question-card{padding:28px 20px 24px}.breakdown-row{grid-template-columns:1fr}.cta-card{padding:36px 24px}.spotlight{padding:24px 20px}}
+.hero{background:var(--navy);color:#fff;text-align:center;padding:80px 24px 72px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(184,137,42,.6),transparent)}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(184,137,42,.14) 0%,transparent 70%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;max-width:580px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#d4a843;margin-bottom:24px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:28px;height:1px;background:#d4a843;opacity:1}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,7vw,4.4rem);font-weight:600;line-height:1.08;letter-spacing:-.01em;margin-bottom:22px;color:#fff}
+.hero h1 em{font-style:italic;color:#d4a843}
+.hero-sub{font-size:17px;font-weight:300;line-height:1.75;color:#ffffff;margin-bottom:40px;letter-spacing:.01em}
+.hero-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.hero-begin-btn{margin-top:28px;padding:16px 40px;background:#d4a843;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#0f1f3d;cursor:pointer;transition:background .2s,transform .2s;letter-spacing:.02em}
+.hero-begin-btn:hover{background:#e0b84d;transform:translateY(-2px)}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;font-size:12px;font-weight:500;color:#ffffff;letter-spacing:.02em}
+
+
+.hvb-card{background:var(--card-bg);border-radius:var(--radius);padding:28px 28px 20px;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-bottom:24px}
+.hvb-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:0;padding:11px 0;border-bottom:1px solid var(--border)}
+.hvb-row:last-child{border-bottom:none;padding-bottom:0}
+.hvb-hero{text-align:right;padding-right:14px}
+.hvb-hero-name{font-size:16px;font-weight:700;color:#166534}
+.hvb-verb{color:#6b7280;font-size:13px;font-weight:500;font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;padding:0 12px;white-space:nowrap;letter-spacing:.02em}
+.hvb-bandit{padding-left:14px}
+.hvb-bandit-name{font-size:16px;font-weight:700;color:#b91c1c}
+
+
+.email-overlay{position:fixed;inset:0;background:rgba(10,18,35,.7);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.email-overlay.visible{opacity:1;pointer-events:all}
+.email-modal{background:#fff;border-radius:var(--radius-lg);padding:40px 36px 32px;max-width:440px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.22);text-align:center;transform:translateY(16px);transition:transform .25s}
+.email-overlay.visible .email-modal{transform:translateY(0)}
+.email-modal-eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.email-modal h3{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:var(--navy);line-height:1.2;margin-bottom:8px}
+.email-modal p{font-size:14px;color:#6b7280;line-height:1.6;margin-bottom:24px}
+.email-field{width:100%;padding:12px 16px;border:1.5px solid #d1cdc4;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;color:#111827;margin-bottom:12px;box-sizing:border-box;transition:border-color .15s}
+.email-field:focus{outline:none;border-color:var(--navy)}
+.email-submit{width:100%;padding:15px;background:#d4a843;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#0f1f3d;cursor:pointer;transition:background .15s;margin-bottom:12px}
+.email-submit:hover{background:#e0b84d}
+.email-bypass{background:none;border:none;font-family:'Inter',sans-serif;font-size:13px;color:#9ca3af;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:4px}
+.email-bypass:hover{color:#6b7280}
+.score-cta-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:12px 28px;background:#d4a843;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#0f1f3d;cursor:pointer;text-decoration:none;transition:background .2s,transform .2s;letter-spacing:.02em}
+.score-cta-btn:hover{background:#e0b84d;transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Paul Monahan Golf</div>
+    <h1>What's Your<br><em>Mental Game Ratio?</em></h1>
+    <p class="hero-sub">Discover where your Heroes and Bandits stand, and get a clear, honest picture of the inside game you're actually playing.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">3–4 minutes</span>
+      <span class="hero-pill">20 scenarios</span>
+      <span class="hero-pill">Instant results</span>
+    </div>
+    <button class="hero-begin-btn" onclick="startQuiz()">Begin the Assessment &nbsp;→</button>
+  </div>
+</header>
+
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">1 of 20</div>
+  </div>
+</div>
+
+<section id="intro-section">
+  <div class="intro-card anim">
+    <h2>Your mental game has a score.</h2>
+    <p>Paul Monahan calls it the <strong>Mental Game Ratio</strong>, a powerful measure of how much your Bandits are interfering with your Heroes of Potential.</p>
+    <p>In 20 short scenarios, you'll get an honest look at the thought patterns running in the background of your game, and a clear, practical path forward.</p>
+    <div class="framework-panel">
+      <div class="fw-title">5 Heroes Framework</div>
+      <div class="fw-header">
+        <div class="fw-header-hero">Hero</div>
+        <div class="fw-header-mid"></div>
+        <div class="fw-header-bandit">Bandit</div>
+      </div>
+      <div class="fw-pair">
+        <div class="fw-hero-name">Love</div>
+        <div class="fw-verb">conquers</div>
+        <div class="fw-bandit-name">Fear</div>
+      </div>
+      <div class="fw-pair">
+        <div class="fw-hero-name">Acceptance</div>
+        <div class="fw-verb">eliminates</div>
+        <div class="fw-bandit-name">Frustration</div>
+      </div>
+      <div class="fw-pair">
+        <div class="fw-hero-name">Commitment</div>
+        <div class="fw-verb">removes</div>
+        <div class="fw-bandit-name">Doubt</div>
+      </div>
+      <div class="fw-pair">
+        <div class="fw-hero-name">Vulnerability</div>
+        <div class="fw-verb">prevents</div>
+        <div class="fw-bandit-name">Shame</div>
+      </div>
+      <div class="fw-pair">
+        <div class="fw-hero-name">Grit</div>
+        <div class="fw-verb">beats</div>
+        <div class="fw-bandit-name">Quit</div>
+      </div>
+    </div>
+    <div class="intro-note">There are no right or wrong answers, just honest ones. The more truthful you are, the more useful your result will be.</div>
+    <button class="btn-primary" onclick="startQuiz()">Begin the Assessment &nbsp;→</button>
+  </div>
+</section>
+
+<section id="quiz-section">
+  <div class="quiz-header">
+    <div class="quiz-header-tag">Mental Game Assessment</div>
+    <h2>How often does this happen for you?</h2>
+  </div>
+  <div class="quiz-inner"><div id="questionsContainer"></div>
+  <div class="quiz-actions">
+    <button class="btn-ghost" id="prevBtn" onclick="navigate(-1)" disabled>← Back</button>
+    <button class="btn-next" id="nextBtn" onclick="navigate(1)" disabled>Next →</button>
+  </div></div>
+</section>
+
+<section id="results-section">
+  <div class="results-inner">
+  <div class="results-intro anim anim-1">
+    <div class="results-eyebrow">Your Results</div>
+    <h2 id="resultHeadline">Your Mental Game Ratio</h2>
+  </div>
+
+  <div class="gauge-card anim anim-2">
+    <div class="gauge-eyebrow">Mental Game Ratio (MGR)</div>
+    <div class="gauge-container">
+      <svg viewBox="0 0 320 244" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Arc center: 160,168  radius: 108 -->
+        <!-- 0=left(-180deg)=(52,168)  1=top(-90deg)=(160,60)  2=right(0deg)=(268,168) -->
+        <!-- Track bg -->
+        <path d="M 52 168 A 108 108 0 0 1 268 168" stroke="rgba(255,255,255,0.08)" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <!-- Red zone: 0 to 0.8  → 0deg to 72deg of arc → -180deg to -108deg -->
+        <!-- at -108deg: x=160+108*cos(-108°)=160-33.4=126.6, y=168+108*sin(-108°)=168-102.8=65.2 -->
+        <path d="M 52 168 A 108 108 0 0 1 119 68" stroke="#e53e3e" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.95"/>
+        <!-- Amber zone: 0.8 to 1.2 → 72deg to 108deg → -108deg to -72deg -->
+        <!-- at -72deg: x=160+108*cos(-72°)=160+33.4=193.4, y=168+108*sin(-72°)=168-102.8=65.2 -->
+        <path d="M 119 68 A 108 108 0 0 1 201 68" stroke="#dd8500" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.95"/>
+        <!-- Green zone: 1.2 to 2.0 → 108deg to 180deg → -72deg to 0deg -->
+        <path d="M 201 68 A 108 108 0 0 1 268 168" stroke="#16a34a" stroke-width="20" fill="none" stroke-linecap="round" opacity="0.95"/>
+        <!-- Zone text labels, outside the arc (r≈132) -->
+        <!-- Red midpoint ~-144deg: x=160+132*cos(-144)=160-107=53, y=168+132*sin(-144)=168-77.6=90 -->
+        <text font-family="Inter" font-size="8.5" font-weight="700" fill="#fc8181" text-anchor="middle"><tspan x="52" y="196">HIGH</tspan><tspan x="52" dy="12">INTERFERENCE</tspan></text>
+        <!-- Amber midpoint = -90deg (top): x=160, y=168-132=36 -->
+        <text x="160" y="38" font-family="Inter" font-size="10" font-weight="800" fill="#fcd34d" text-anchor="middle">BATTLE</text>
+        <!-- Green midpoint ~-36deg: x=160+132*cos(-36)=160+107=267, y=168+132*sin(-36)=168-77.6=90 -->
+        <text font-family="Inter" font-size="8.5" font-weight="700" fill="#6ee7b7" text-anchor="middle"><tspan x="268" y="196">LOW</tspan><tspan x="268" dy="12">INTERFERENCE</tspan></text>
+        <!-- Tick marks and scale numbers outside arc at r=126 -->
+        <!-- 0 at -180deg: (160-126, 168) = (34, 168) -->
+        <line x1="52" y1="168" x2="38" y2="168" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        <text x="24" y="173" font-family="Inter" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">0</text>
+        <!-- 1 at -90deg (top): (160, 168-126) = (160, 42) -->
+        <line x1="160" y1="60" x2="160" y2="44" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        <text x="160" y="33" font-family="Inter" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle" dy="-8">1</text>
+        <!-- 2 at 0deg (right): (160+126, 168) = (286, 168) -->
+        <line x1="268" y1="168" x2="282" y2="168" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+        <text x="296" y="173" font-family="Inter" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+        <!-- Needle: pivot at (160, 168), starts pointing left (fully CCW = -88deg) -->
+        <line id="gaugeNeedle" x1="160" y1="168" x2="160" y2="68"
+              stroke="white" stroke-width="3" stroke-linecap="round"
+              style="transform-origin:160px 168px;transform:rotate(-88deg);transition:transform 1.4s cubic-bezier(.16,1,.3,1)"/>
+        <circle cx="160" cy="168" r="10" fill="rgba(255,255,255,0.13)"/>
+        <circle cx="160" cy="168" r="6" fill="white"/>
+        <!-- Bandits / Heroes axis labels -->
+      </svg>
+    </div>
+    <div class="gauge-score-overlay">
+      <div class="gauge-mgr-num" id="mgrDisplay">--</div>
+      <div class="gauge-mgr-label">MGR</div>
+      <a href="https://mentalgolfbook.com" class="score-cta-btn" target="_blank">Explore Mental Game Mastery &nbsp;→</a>
+    </div>
+    <div class="gauge-tier-name" id="tierLabel">--</div>
+    <div class="gauge-tier-copy" id="tierCopy">--</div>
+  </div>
+
+  <div class="breakdown-row anim anim-3">
+    <div class="bd-card bd-bandits">
+      <div class="bd-card-title">Bandit Scores</div>
+      <div id="banditRows"></div>
+    </div>
+    <div class="bd-card bd-heroes">
+      <div class="bd-card-title">Hero Scores</div>
+      <div id="heroRows"></div>
+    </div>
+  </div>
+  <div class="anim anim-3" style="margin-bottom:24px">
+    <div class="spotlight-block-title">Heroes vs. Bandits</div>
+    <div class="hvb-card">
+      <div class="hvb-row">
+        <div class="hvb-hero"><div class="hvb-hero-name">Love</div></div>
+        <div class="hvb-verb">conquers</div>
+        <div class="hvb-bandit"><div class="hvb-bandit-name">Fear</div></div>
+      </div>
+      <div class="hvb-row">
+        <div class="hvb-hero"><div class="hvb-hero-name">Acceptance</div></div>
+        <div class="hvb-verb">eliminates</div>
+        <div class="hvb-bandit"><div class="hvb-bandit-name">Frustration</div></div>
+      </div>
+      <div class="hvb-row">
+        <div class="hvb-hero"><div class="hvb-hero-name">Commitment</div></div>
+        <div class="hvb-verb">removes</div>
+        <div class="hvb-bandit"><div class="hvb-bandit-name">Doubt</div></div>
+      </div>
+      <div class="hvb-row">
+        <div class="hvb-hero"><div class="hvb-hero-name">Vulnerability</div></div>
+        <div class="hvb-verb">prevents</div>
+        <div class="hvb-bandit"><div class="hvb-bandit-name">Shame</div></div>
+      </div>
+      <div class="hvb-row">
+        <div class="hvb-hero"><div class="hvb-hero-name">Grit</div></div>
+        <div class="hvb-verb">beats</div>
+        <div class="hvb-bandit"><div class="hvb-bandit-name">Quit</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spotlight-block anim anim-4">
+    <div class="spotlight-block-title">Your biggest opportunity</div>
+    <div class="spotlight bandit-card" id="banditSpotlight"></div>
+  </div>
+
+  <div class="spotlight-block anim anim-5">
+    <div class="spotlight-block-title">Your strongest asset</div>
+    <div class="spotlight hero-card" id="heroSpotlight"></div>
+  </div>
+
+  <div class="cta-card anim">
+    <div class="cta-card-inner">
+      <div class="cta-eyebrow">Your Next Step</div>
+      <h3 id="ctaHeading">Ready to move the needle?</h3>
+      <p id="ctaCopy">Your MGR is just the starting point. The good news? Every one of these patterns can be shifted, and it's simpler than you've been told.</p>
+      <a href="https://mentalgolfbook.com" class="cta-gold-btn">Explore Mental Game Mastery →</a>
+      <button class="cta-retake" onclick="retake()">Retake the assessment</button>
+    </div>
+  </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong style="color:#ffffff">Paul Monahan Golf</strong>&nbsp;&nbsp;·&nbsp;&nbsp;Play Better. Struggle Less. Enjoy More.&nbsp;&nbsp;·&nbsp;&nbsp;© 2025 All Rights Reserved</p>
+</footer>
+
+<script>
+
+
+const Q=[
+  {id:'fear_1',concept:'Fear',type:'bandit',text:"You're standing on the first tee. There are a few people watching. Before you swing, how often do you feel a tightening in your chest, worried about what others will think if you mishit it?"},
+  {id:'frust_1',concept:'Frustration',type:'bandit',text:"You hit a perfectly planned shot that ends up in the rough. How often does that unexpected result pull you out of your game for the next hole or two?"},
+  {id:'love_1',concept:'Love',type:'hero',text:"You're about to hit a challenging shot that requires real creativity. How often do you feel a spark of genuine excitement about the challenge ahead, rather than anxiety about the result?"},
+  {id:'doubt_1',concept:'Doubt',type:'bandit',text:"You're standing over a shot you've hit a hundred times before. How often does a quiet voice inside say 'I'm not sure about this one' right before you pull the trigger?"},
+  {id:'accept_1',concept:'Acceptance',type:'hero',text:"After a poor shot, how often are you able to acknowledge what happened, let it go, and walk to your next shot with a clear head, without carrying that last one forward?"},
+  {id:'shame_1',concept:'Shame',type:'bandit',text:"You duff a chip in front of your playing partners. How often do you feel a wave of embarrassment that makes you want to apologize or retreat into yourself?"},
+  {id:'commit_1',concept:'Commitment',type:'hero',text:"When you choose a shot, how often do you step into it with full conviction, committing completely to the decision rather than second-guessing yourself mid-swing?"},
+  {id:'quit_1',concept:'Quit',type:'bandit',text:"You're having a rough back nine. How often does a part of you mentally check out, going through the motions rather than staying fully invested in each shot?"},
+  {id:'vuln_1',concept:'Vulnerability',type:'hero',text:"How often are you willing to try a new technique or approach on the course, even knowing it might not work perfectly, because you're genuinely curious about improving?"},
+  {id:'fear_2',concept:'Fear',type:'bandit',text:"You have a 6-foot putt to save par. How often do you find yourself focused on the consequences of missing, rather than simply committing to rolling the ball into the hole?"},
+  {id:'persev_1',concept:'Grit',type:'hero',text:"You're four over through ten holes and nothing is clicking. How often do you still find a way to stay fully engaged, approaching each remaining shot like it genuinely matters?"},
+  {id:'frust_2',concept:'Frustration',type:'bandit',text:"When your score doesn't reflect how well you feel you've been playing, how often do you find yourself internally replaying what went wrong, hole by hole?"},
+  {id:'love_2',concept:'Love',type:'hero',text:"When you walk onto a golf course, even on a day when your game isn't sharp, how often do you feel a genuine sense of gratitude just for being out there?"},
+  {id:'doubt_2',concept:'Doubt',type:'bandit',text:"After a stretch of poor holes, how often do you start to question whether you actually have what it takes to play this game well?"},
+  {id:'accept_2',concept:'Acceptance',type:'hero',text:"When the course gives you a bad bounce or an unlucky lie, how often are you able to genuinely accept it, and focus immediately on the best path forward?"},
+  {id:'shame_2',concept:'Shame',type:'bandit',text:"After a bad round, how often do you find yourself replaying your mistakes hours, or even days, later, feeling like you've let yourself down?"},
+  {id:'commit_2',concept:'Commitment',type:'hero',text:"How often do you stick to your game plan on a hole, even when your ego tempts you toward a riskier shot that your playing partner just pulled off?"},
+  {id:'quit_2',concept:'Quit',type:'bandit',text:"When golf feels really hard, when nothing is working, how often does a part of you want to give up on the game altogether, even just briefly?"},
+  {id:'vuln_2',concept:'Vulnerability',type:'hero',text:"When someone offers you feedback on your game, how often do you receive it openly, without immediately defending your current approach or brushing it aside?"},
+  {id:'persev_2',concept:'Grit',type:'hero',text:"When you go through a stretch where your game feels like it's moving backward, how often do you keep showing up to practice and play with the same commitment as when things were going well?"}
+];
+
+const BD={Fear:{desc:"Fear shows up as nervousness, tension, and doubt, especially in high-stakes moments. It's your brain's protection system doing its job, but on the golf course it often costs you strokes and robs you of the free swing you're capable of.",strategy:"The counterbalance to Fear is Love and Passion. The next time you feel nervous, shift your attention to how much you genuinely love this challenge. Fear shrinks when love grows. Try saying: 'I love this moment. I can't wait to hit this shot.'"},Frustration:{desc:"Frustration is the argument you're having with Reality. When the shot you expected didn't happen, your Story about how golf 'should' go creates friction, and that friction leaks directly into your next shot.",strategy:"Practice Acceptance as your default response. Say to yourself: 'That happened. What's Important Now?' You can't control the bounce, but you can choose whether you carry it to the next hole."},Doubt:{desc:"Doubt creeps in between commitment and execution, a quiet voice that undercuts your confidence right when you need it most. It often surfaces after a rough patch, when your identity as a golfer feels fragile.",strategy:"Channel your inner coach using your own name: '[Your name], you've hit this shot a thousand times. Trust what you know.' Doubt hates certainty, give it some before you step into the shot."},Shame:{desc:"Shame is one of the most powerful Bandits because it attacks your identity, not just your shots. It makes you want to hide, apologize, or disappear, which is the opposite of what great golf requires.",strategy:"See your shots as feedback, not failure. You are not your golf score. Mistakes are what learning looks like in real time, and every great player on the planet misses shots. Every single one."},Quit:{desc:"Quit can show up as checking out mentally mid-round, or as the quiet resignation that whispers 'this just isn't my day.' It disconnects you from the shot in front of you, the only shot that ever truly matters.",strategy:"Decide before you start that Grit is your mindset today. Remind yourself: 'Struggle is the feeling of growth. I am growing right now.' Then ask: 'What if my next shot is my best shot?' Because it genuinely could be."}};
+
+const HD={Love:{desc:"Love and Passion are the antidote to fear. When you're connected to how much you genuinely love this game, the challenge, the camaraderie, the feeling of a pure strike, your nervous system shifts from threat to opportunity.",strategy:"You're already drawing on Love regularly. Keep feeding it deliberately. Before difficult shots, take one breath and reconnect to why you love this challenge, this game, this moment on the course."},Acceptance:{desc:"Acceptance doesn't mean lowering your standards, it means refusing to waste energy arguing with what already happened. It's what keeps your head clear for the shot that actually matters: the next one.",strategy:"Your Acceptance is a real asset. Use it as a reset tool, especially when other Bandits try to creep in. The phrase 'May I want what wants to happen' is something worth carrying with you every round."},Commitment:{desc:"Committed shots come from a clear decision fully executed. When you step in with conviction, your body follows. Doubt and indecision produce mechanical, tentative swings. Commitment produces athletic, free ones.",strategy:"Your Commitment is strong, protect it. When the ego pulls you toward a risky play, check in: 'What's the most committed shot I can hit right now?' That question almost always leads to the right answer."},Vulnerability:{desc:"Vulnerability in golf is the willingness to try, to learn, to be seen, even when the outcome is uncertain. It's the quality that keeps you improving long after most players have stopped growing.",strategy:"You're open to growth, that's genuinely rare. Lean into it deliberately. Put on your 'lab coat' at the range and treat every session as an experiment to learn from, not a performance to judge yourself by."},Grit:{desc:"Grit is the commitment to stay in the swing, the hole, and the round, no matter how bleak things feel. It separates players who finish strong from those who mentally tap out at the turn.",strategy:"Your Grit is a genuine strength. When things get hard, remind yourself: 'It's not over until it's over. My next shot could be my best shot.' And then go out and prove it."}};
+
+const TIERS=[
+  {min:0,max:.8,label:"High Interference",copy:"The Bandits are loud right now, and they're costing you strokes. The good news? You've already taken the first step by getting honest about where you are. Knowing the gap is exactly what makes closing it possible. This is the best starting point there is.",cta:"Your Mental Game Is Ready to Transform"},
+  {min:.8,max:1.2,label:"In the Battle",copy:"Your Heroes and Bandits are running neck and neck. Some days the Heroes show up and you play with real freedom. Other days the Bandits win. The work here is learning to shift more consistently, especially in the moments when the game gets hard.",cta:"Your Next Level Is Within Reach"},
+  {min:1.2,max:1.8,label:"Building Momentum",copy:"Your Heroes are gaining ground. You're already doing a lot of things right mentally, accepting outcomes, staying committed, persevering through the hard holes. Now it's about sharpening the edges and making this your consistent default, round after round.",cta:"You're Ready to Play With Real Freedom"},
+  {min:1.8,max:999,label:"Playing With Freedom",copy:"You're operating from a strong mental foundation. Your Heroes are dominant, your Bandits are manageable, and you're showing up with the right mindset more often than not. The invitation now is to go deeper and make this level of play your permanent standard.",cta:"Let's Take Your Mental Game Even Further"}
+];
+
+let cur=0,answers={};
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+let QR=[];
+function buildQuiz(){
+  QR=shuffle([...Q]);
+  const w=document.getElementById('questionsContainer');
+  w.innerHTML='';
+  QR.forEach((q,i)=>{
+    const c=document.createElement('div');
+    c.className='question-card'+(i===0?' active':'');
+    c.id='qc_'+i;
+    c.innerHTML=`
+      <div class="q-counter"><span>${i+1} <span style="color:#374151">/ ${QR.length}</span></span></div>
+      <div class="q-text">${q.text}</div>
+      <div class="scale-wrapper">
+        <div class="scale-row">
+          ${[1,2,3,4,5].map(v=>`<div class="scale-option"><button class="scale-btn" data-q="${i}" data-v="${v}" onclick="pick(${i},${v})">${v}</button></div>`).join('')}
+        </div>
+        <div class="scale-ends"><span class="scale-end-label">Never</span><span class="scale-end-label">Always</span></div>
+      </div>`;
+    w.appendChild(c);
+  });
+}
+
+function startQuiz(){
+  document.getElementById('intro-section').style.display='none';
+  document.querySelector('.hero').style.display='none';
+  document.getElementById('quiz-section').style.display='block';
+  document.getElementById('progressWrap').classList.add('visible');
+  buildQuiz();syncNav();syncProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pick(qi,val){
+  answers[QR[qi].id]=val;
+  document.querySelectorAll(`.scale-btn[data-q="${qi}"]`).forEach(b=>b.classList.toggle('selected',+b.dataset.v===val));
+  syncNav();syncProgress();
+}
+
+function navigate(dir){
+  const nx=cur+dir;
+  if(nx<0||nx>=Q.length)return;
+  document.getElementById('qc_'+cur).classList.remove('active');
+  cur=nx;
+  document.getElementById('qc_'+cur).classList.add('active');
+  syncNav();syncProgress();
+  window.scrollTo({top:60,behavior:'smooth'});
+}
+
+function syncNav(){
+  document.getElementById('prevBtn').disabled=cur===0;
+  const answered=answers[QR[cur].id]!==undefined;
+  const allDone=QR.every(q=>answers[q.id]!==undefined);
+  const isLast=cur===QR.length-1;
+  const nb=document.getElementById('nextBtn');
+  nb.disabled=!answered;
+  if(isLast&&allDone){nb.textContent='See My Results →';nb.onclick=showEmailModal;}
+  else{nb.textContent='Next →';nb.onclick=()=>navigate(1);}
+}
+
+function syncProgress(){
+  const done=Object.keys(answers).length;
+  document.getElementById('progressFill').style.width=(done/QR.length*100)+'%';
+  document.getElementById('progressText').textContent=(cur+1)+' of '+QR.length;
+}
+
+function showResults(){
+  const sums={},counts={};
+  Q.forEach(q=>{const v=answers[q.id]||3;sums[q.concept]=(sums[q.concept]||0)+v;counts[q.concept]=(counts[q.concept]||0)+1;});
+  const avgs={};Object.keys(sums).forEach(c=>{avgs[c]=sums[c]/counts[c];});
+  const bandits=['Fear','Frustration','Doubt','Shame','Quit'];
+  const heroes=['Love','Acceptance','Commitment','Vulnerability','Grit'];
+  const aTotal=bandits.reduce((s,b)=>s+(avgs[b]||0),0);
+  const bTotal=heroes.reduce((s,h)=>s+(avgs[h]||0),0);
+  const mgr=aTotal>0?bTotal/aTotal:0;
+  const tier=TIERS.find(t=>mgr>=t.min&&mgr<t.max)||TIERS[TIERS.length-1];
+
+  document.getElementById('quiz-section').style.display='none';
+  document.getElementById('progressWrap').classList.remove('visible');
+  document.getElementById('results-section').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  document.getElementById('resultHeadline').innerHTML=`You're <em>${tier.label}</em>`;
+  document.getElementById('mgrDisplay').textContent=mgr.toFixed(2);
+  // Map MGR 0–2 to needle angle -90deg (left) to +90deg (right)
+  // MGR 1.0 = dead center = 0deg rotation
+  const rawAngle = (Math.min(mgr, 2) / 2) * 180 - 90;
+  const angle = Math.min(Math.max(rawAngle, -88), 88);
+  setTimeout(()=>{document.getElementById('gaugeNeedle').style.transform=`rotate(${angle}deg)`;},350);
+  document.getElementById('tierLabel').textContent=tier.label;
+  document.getElementById('tierCopy').textContent=tier.copy;
+  document.getElementById('ctaHeading').textContent=tier.cta;
+
+  document.getElementById('banditRows').innerHTML=bandits.map(b=>`<div class="score-row"><div class="score-name">${b}</div><div class="score-track"><div class="score-fill" data-p="${((avgs[b]||0)/7*100).toFixed(1)}" style="width:0%"></div></div><div class="score-num">${(avgs[b]||0).toFixed(1)}</div></div>`).join('');
+  document.getElementById('heroRows').innerHTML=heroes.map(h=>`<div class="score-row"><div class="score-name">${h}</div><div class="score-track"><div class="score-fill" data-p="${((avgs[h]||0)/7*100).toFixed(1)}" style="width:0%"></div></div><div class="score-num">${(avgs[h]||0).toFixed(1)}</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.score-fill').forEach(el=>{el.style.width=el.dataset.p+'%';});},450);
+
+  const topB=bandits.reduce((a,b)=>(avgs[a]||0)>=(avgs[b]||0)?a:b);
+  const bInfo=BD[topB];
+  document.getElementById('banditSpotlight').innerHTML=`<div class="spotlight-concept">Your Biggest Bandit</div><div class="spotlight-name">${topB}</div><div class="spotlight-desc">${bInfo.desc}</div><div class="strategy-tag">Your Strategy</div><div class="strategy-body">${bInfo.strategy}</div>`;
+
+  const topH=heroes.reduce((a,b)=>(avgs[a]||0)>=(avgs[b]||0)?a:b);
+  const hInfo=HD[topH];
+  document.getElementById('heroSpotlight').innerHTML=`<div class="spotlight-concept">Your Strongest Hero</div><div class="spotlight-name">${topH}</div><div class="spotlight-desc">${hInfo.desc}</div><div class="strategy-tag">Keep Doing This</div><div class="strategy-body">${hInfo.strategy}</div>`;
+}
+
+function retake(){
+  cur=0;answers={};QR=[];
+  document.getElementById('questionsContainer').innerHTML='';
+  document.getElementById('results-section').style.display='none';
+  document.getElementById('intro-section').style.display='block';
+  document.querySelector('.hero').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showEmailModal(){
+  document.getElementById('emailOverlay').classList.add('visible');
+  document.getElementById('emailName').focus();
+}
+
+function submitEmail(){
+  const name = document.getElementById('emailName').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  if(!email || !email.includes('@')){
+    document.getElementById('emailInput').style.borderColor='#e53e3e';
+    document.getElementById('emailInput').focus();
+    return;
+  }
+  document.getElementById('emailOverlay').classList.remove('visible');
+  showResults();
+}
+
+function bypassEmail(){
+  document.getElementById('emailOverlay').classList.remove('visible');
+  showResults();
+}
+
+</script>
+
+<div class="email-overlay" id="emailOverlay">
+  <div class="email-modal">
+    <div class="email-modal-eyebrow">Your Free Assessment</div>
+    <h3>Where should we send your results?</h3>
+    <p>Enter your details below to receive your Mental Game Ratio and a personalized breakdown.</p>
+    <input class="email-field" id="emailName" type="text" placeholder="Your first name" autocomplete="given-name">
+    <input class="email-field" id="emailInput" type="email" placeholder="Your email address" autocomplete="email">
+    <button class="email-submit" onclick="submitEmail()">Get My Results &nbsp;→</button>
+    <button class="email-bypass" onclick="bypassEmail()">Bypass email — take me to my results</button>
+  </div>
+</div>
+
+</body>
+</html>
